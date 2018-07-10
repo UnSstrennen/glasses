@@ -1,16 +1,26 @@
-#include <SoftwareSerial.h>
+/*
+Devices:
+#1 - left side distance (sonic)
+#2 - center distance (sonic)
+#3 - right side distance (sonic)
+*/
 
+#include <SoftwareSerial.h>
 #include <Wire.h>
 #include <DFRobotDFPlayerMini.h>
 
 const byte RX = 10;
 const byte TX = 11;
+
 SoftwareSerial music_player(RX, TX);
+
 DFRobotDFPlayerMini myDFPlayer;
 
-byte a;
-byte b;
-byte c;
+byte L, C, R;
+
+//-----
+const byte volumeDecrease = 5; //decreased general volume
+//-----
 
 void setup() 
 {
@@ -21,87 +31,60 @@ void setup()
 
 void loop() 
 {
-	Wire.requestFrom(1, 1);    // request 6 bytes from slave device #8
+/* Requesting bytes from slave devices */
+// slave may send less than requested, so using -> 'while()'
+
+	Wire.requestFrom(1, 1);    // requesting byte from device #1
 
 	while (Wire.available()) 
-	{ // slave may send less than requested
-		a = Wire.read(); // receive a byte as character
-		a = map (a, 0, 170, 30, 0);
+	{ 
+		L = Wire.read(); // receive byte as character
+		L = map (a, 0, 170, 30, 0);
 		Serial.println(a);         // print the character
 	}
 
-  delay(30);
-
-	Wire.requestFrom(2, 1);    // request 6 bytes from slave device #8
+	Wire.requestFrom(2, 1);    // requesting byte from device #2
 
 	while (Wire.available()) 
-	{ // slave may send less than requested
-		b = Wire.read(); // receive a byte as character
-		b = map (b, 0, 170, 30, 0);
+	{\
+		C = Wire.read(); // receive a byte as character
+		C = map (b, 0, 170, 30, 0);
 		Serial.println(b);         // print the character
 	}
 
-	delay(30);
-
-	Wire.requestFrom(3, 1);    // request 6 bytes from slave device #8
+	Wire.requestFrom(3, 1);    // requesting byte from device #3
 
 	while (Wire.available()) 
-	{ // slave may send less than requested
-		c = Wire.read(); // receive a byte as character
-		c = map (c, 0, 170, 30, 0);
+	{
+		R = Wire.read(); // receive a byte as character
+		R = map (c, 0, 170, 30, 0);
 	Serial.println(c);         // print the character
 	}
 
-	delay(30);
+/* Playing Sounds */
 
-	playL(a);
-	playC(b);
-	playR(c);
-
-	delay(10);
+	playSound(1, L - volumeDecrease); // Left side track
+	playSound(3, C - volumeDecrease); // Center track
+	playSound(5, R - volumeDecrease); // Right side track
 }
 
-int volumeDecrease = 5; //уменьшил громкость
-
-void playL(byte volume) 
-{
-// играем L с громкостью volume
-	myDFPlayer.volume(volume-volumeDecrease);
-// номер дорожки без нулей в начале
-	const byte TRACK_NUMBER = 1;
-	myDFPlayer.play(TRACK_NUMBER);
-}
-
-void playC(byte volume) 
-{
-// играем C с громкостью volume
-	myDFPlayer.volume(volume-volumeDecrease);
-// номер дорожки без нулей в начале
-	const byte TRACK_NUMBER = 3;
-	myDFPlayer.play(TRACK_NUMBER);
-}
-
-void playR(byte volume) 
-{
-// играем C с громкостью volume
-	myDFPlayer.volume(volume-volumeDecrease);
-// номер дорожки без нулей в начале
-	const byte TRACK_NUMBER = 5;
+void playSound(byte TRACK_NUMBER, byte volume) 
+{ // playing track 'TRACK_NUMBER' with volume 'volume'
+	myDFPlayer.volume(volume);
 	myDFPlayer.play(TRACK_NUMBER);
 }
 
 void player_settings() 
 {
-	music_player.begin (9600); // открываем софт-порт
-	Serial.println();
-	Serial.println(F("DFRobot DFPlayer Mini Demo"));
-	Serial.println(F("Initializing DFPlayer ... (May take 3~5 seconds)"));
+	music_player.begin (9600); // opening soft-port
+		
+	Serial.println(F("\nInitializing DFPlayer\nThis operation may take some time . . ."));
 
 	if (!myDFPlayer.begin(music_player)) 
-	{  //Use softwareSerial to communicate with mp3.
-		Serial.println(F("Unable to begin:"));
-		Serial.println(F("1.Please recheck the connection!"));
-		Serial.println(F("2.Please insert the SD card!"));
+	{  // Using softwareSerial to communicate with mp3.
+		Serial.println(F("Unable to begin. Possible Reasons:\n "));
+		Serial.println(F("1. Connection lost."));
+		Serial.println(F("2. SD card may not be inserted yet."));
 	}
 	Serial.println(F("DFPlayer Mini online."));
 }
