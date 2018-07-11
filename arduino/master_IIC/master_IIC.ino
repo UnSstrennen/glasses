@@ -3,6 +3,8 @@ Devices:
 #1 - left side distance (sonic)
 #2 - center distance (sonic)
 #3 - right side distance (sonic)
+
+if you request more than 1 byte from IIC line, use [while (Wire.available())]
 */
 
 #include <SoftwareSerial.h>
@@ -35,31 +37,19 @@ void loop()
 // slave may send less than requested, so using -> 'while()'
 
 	Wire.requestFrom(1, 1);    // requesting byte from device #1
-
-	while (Wire.available()) 
-	{ 
 		L = Wire.read(); // receive byte as character
 		L = map (a, 0, 170, 30, 0);
 		Serial.println(a);         // print the character
-	}
 
 	Wire.requestFrom(2, 1);    // requesting byte from device #2
-
-	while (Wire.available()) 
-	{\
 		C = Wire.read(); // receive a byte as character
 		C = map (b, 0, 170, 30, 0);
 		Serial.println(b);         // print the character
-	}
 
 	Wire.requestFrom(3, 1);    // requesting byte from device #3
-
-	while (Wire.available()) 
-	{
 		R = Wire.read(); // receive a byte as character
 		R = map (c, 0, 170, 30, 0);
 	Serial.println(c);         // print the character
-	}
 
 /* Playing Sounds */
 
