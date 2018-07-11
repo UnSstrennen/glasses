@@ -37,19 +37,20 @@ void loop()
 // slave may send less than requested, so using -> 'while()'
 
 	Wire.requestFrom(1, 1);    // requesting byte from device #1
-		L = Wire.read(); // receive byte as character
-		L = map (a, 0, 170, 30, 0);
-		Serial.println(a);         // print the character
+	L = Wire.read(); // receive byte as character
+	Serial.println(L);         // print the character
+	L = map (c, 0, 170, 30, 0);
 
 	Wire.requestFrom(2, 1);    // requesting byte from device #2
-		C = Wire.read(); // receive a byte as character
-		C = map (b, 0, 170, 30, 0);
-		Serial.println(b);         // print the character
+	C = Wire.read(); // receive a byte as character
+	Serial.println(C);         // print the character
+	C = map (c, 0, 170, 30, 0);
 
 	Wire.requestFrom(3, 1);    // requesting byte from device #3
-		R = Wire.read(); // receive a byte as character
-		R = map (c, 0, 170, 30, 0);
-	Serial.println(c);         // print the character
+	R = Wire.read(); // receive a byte as character
+	Serial.println(R);         // print the character
+	R = map (c, 0, 170, 30, 0);
+
 
 /* Playing Sounds */
 
