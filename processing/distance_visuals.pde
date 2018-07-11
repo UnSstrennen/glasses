@@ -127,6 +127,7 @@ void varCheck()
 ///////////Serial///////////
 void SerialEvent (Serial arduinoport) 
 {
+try{
   if (arduinoport.available() > 0 /*&& arduinoport.readStringUntil('\n').indexOf('_') != -1*/) 
   {
     String Line = arduinoport.readStringUntil('\n');
@@ -138,4 +139,5 @@ void SerialEvent (Serial arduinoport)
       val_R = Integer.parseInt(Line.substring(Line.indexOf("R")+1,Line.indexOf("_")));
     }
   }
+  catch(Exception e){}
 }
