@@ -13,7 +13,7 @@ const int avgTimes = 10;
 
 void setup() 
 {
-	Wire.begin(3);                // join i2c bus with address #
+	Wire.begin(2);                // join i2c bus with address #
 	Wire.onRequest(requestEvent); // register event
 	pinMode(Trigger, OUTPUT);
 	pinMode(Echo, INPUT);
@@ -24,12 +24,12 @@ void loop()
 {
 	//GetInfo();
 
-  for (int i = 0; i<avgTimes; i++)
+  for (int i = 0; i < avgTimes; i++)
   {
     dist = getDistance(Trigger, Echo);
-    total+=dist;
+    total += dist;
    }
-   outDist = total/avgTimes;
+   outDist = total / avgTimes;
   //Serial.println(total/avgTimes);
   total=0;
 }
