@@ -24,6 +24,11 @@ byte L, C, R;
 const byte volumeDecrease = 5; //decreased general volume
 //-----
 
+// adresses of slaves
+const byte L_ADRESS = 3;
+const byte C_ADRESS = 1;
+const byte R_ADRESS = 2;
+
 void setup() 
 {
   Serial.begin(9600);  // start serial for output
@@ -36,20 +41,24 @@ void loop()
 /* Requesting bytes from slave devices */
 // slave may send less than requested, so using -> 'while()'
 
-	Wire.requestFrom(1, 1);    // requesting byte from device #1
-		L = Wire.read(); // receive byte as character
-		L = map (a, 0, 170, 30, 0);
-		Serial.println(a);         // print the character
+	Wire.requestFrom(L_ADRESS, 1);    // requesting byte from device #1
+	L = Wire.read(); // receive byte as character
+	//Serial.println("L " + String(L));         // print the character
+	L = map (L, 0, 170, 30, 0);
 
-	Wire.requestFrom(2, 1);    // requesting byte from device #2
-		C = Wire.read(); // receive a byte as character
-		C = map (b, 0, 170, 30, 0);
-		Serial.println(b);         // print the character
+	Wire.requestFrom(C_ADRESS, 1);    // requesting byte from device #2
+	C = Wire.read(); // receive a byte as character
+	//Serial.println("C " + String(C));         // print the character
+	C = map (C, 0, 170, 30, 0);
 
-	Wire.requestFrom(3, 1);    // requesting byte from device #3
-		R = Wire.read(); // receive a byte as character
-		R = map (c, 0, 170, 30, 0);
-	Serial.println(c);         // print the character
+	Wire.requestFrom(R_ADRESS, 1);    // requesting byte from device #3
+	R = Wire.read(); // receive a byte as character
+	//Serial.println("R " + String(R));         // print the character
+	R = map (R, 0, 170, 30, 0);
+
+  // New line
+  //Serial.println();
+
 
 /* Playing Sounds */
 
@@ -68,13 +77,13 @@ void player_settings()
 {
 	music_player.begin (9600); // opening soft-port
 		
-	Serial.println(F("\nInitializing DFPlayer\nThis operation may take some time . . ."));
+	Serial.println(F("\nInitializing DFPlayer\nThis operation may take some time . . .\n"));
 
-	if (!myDFPlayer.begin(music_player)) 
+	if (myDFPlayer.begin(music_player)) 
 	{  // Using softwareSerial to communicate with mp3.
-		Serial.println(F("Unable to begin. Possible Reasons:\n "));
+		Serial.println(F("Unable to begin. Possible Reasons: "));
 		Serial.println(F("1. Connection lost."));
-		Serial.println(F("2. SD card may not be inserted yet."));
+		Serial.println(F("2. SD card may not be inserted yet.\n"));
 	}
-	Serial.println(F("DFPlayer Mini online."));
+	else{Serial.println(F("DFPlayer Mini online."));}
 }
