@@ -22,6 +22,7 @@ byte L, C, R;
 
 //-----
 const byte volumeDecrease = 5; //decreased general volume
+const byte VOLUME_SLICE = 10; // if volume is less than VOLUME_SLICE, the track won't be played
 //-----
 
 // adresses of slaves
@@ -61,10 +62,15 @@ void loop()
 
 
 /* Playing Sounds */
-
+  if (L < VOLUME_SLICE) {
 	playSound(1, L - volumeDecrease); // Left side track
+  }
+  if (C < VOLUME_SLICE) {
 	playSound(3, C - volumeDecrease); // Center track
+  }
+  if (R < VOLUME_SLICE) {
 	playSound(5, R - volumeDecrease); // Right side track
+  }
 }
 
 void playSound(byte TRACK_NUMBER, byte volume) 
