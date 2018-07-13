@@ -62,14 +62,17 @@ void loop()
 
 
 /* Playing Sounds */
-  if (L < VOLUME_SLICE) {
+  if (L > VOLUME_SLICE) {
 	playSound(1, L - volumeDecrease); // Left side track
+  Serial.println("Played L");
   }
-  if (C < VOLUME_SLICE) {
+  if (C > VOLUME_SLICE) {
 	playSound(3, C - volumeDecrease); // Center track
+ Serial.println("Played C");
   }
-  if (R < VOLUME_SLICE) {
+  if (R > VOLUME_SLICE) {
 	playSound(5, R - volumeDecrease); // Right side track
+ Serial.println("Played R");
   }
 }
 
