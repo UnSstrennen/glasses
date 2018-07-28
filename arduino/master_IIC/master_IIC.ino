@@ -22,7 +22,7 @@ byte L, C, R;
 
 //-----
 const byte volumeDecrease = 5; //decreased general volume
-const byte VOLUME_SLICE = 10; // if volume is less than VOLUME_SLICE, the track won't be played
+const byte VOLUME_SLICE = 13; // if volume is less than VOLUME_SLICE, the track won't be played
 //-----
 
 // adresses of slaves
@@ -62,14 +62,17 @@ void loop()
 
 
 /* Playing Sounds */
-  if (L < VOLUME_SLICE) {
-	playSound(1, L - volumeDecrease); // Left side track
+  if (L > VOLUME_SLICE) {
+	playSound(3, L - volumeDecrease); // Left side track
+  Serial.println("Played L");
   }
-  if (C < VOLUME_SLICE) {
-	playSound(3, C - volumeDecrease); // Center track
+  if (C > VOLUME_SLICE) {
+	playSound(2, C - volumeDecrease); // Center track
+ Serial.println("Played C");
   }
-  if (R < VOLUME_SLICE) {
-	playSound(5, R - volumeDecrease); // Right side track
+  if (R > VOLUME_SLICE) {
+	playSound(1, R - volumeDecrease); // Right side track
+ Serial.println("Played R");
   }
 }
 
